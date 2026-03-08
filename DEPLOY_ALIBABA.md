@@ -1,7 +1,7 @@
 
-# 阿里云服务器项目部署方案 (Dianping Clone)
+# 阿里云服务器项目部署方案 (Dianping Clone) - Ubuntu 22.04 LTS 版
 
-本文档将指导您如何将 **Dianping Clone** 项目部署到阿里云 ECS 服务器，并配置域名访问 (`www.shanmao.site`)。
+本文档将指导您如何将 **Dianping Clone** 项目部署到阿里云 ECS 服务器 (推荐系统: **Ubuntu 22.04 LTS**)，并配置域名访问 (`www.shanmao.site`)。
 
 ---
 
@@ -9,7 +9,7 @@
 
 ### 1.1 服务器要求
 - **阿里云 ECS 实例**:
-  - 操作系统: **Ubuntu 22.04 LTS** (推荐) 或 CentOS 7+
+  - 操作系统: **Ubuntu 22.04.5 LTS** (当前最新稳定版)
   - 规格: 2 vCPU, 4GB RAM (最低配置建议)
   - 公网 IP: 必须具备
 
@@ -22,12 +22,16 @@
 ## 2. 服务器环境配置
 
 ### 2.1 连接服务器
-使用 SSH 连接到您的服务器：
+使用 SSH 连接到您的服务器（推荐使用密钥对）：
 ```bash
+# 如果使用密钥对
+ssh -i /path/to/your-key.pem root@<您的服务器IP>
+
+# 如果使用密码
 ssh root@<您的服务器IP>
 ```
 
-### 2.2 安装必要软件
+### 2.2 安装必要软件 (Ubuntu 22.04)
 为了简化操作，您可以直接运行项目根目录下的 `setup_alibaba.sh` 脚本，或者手动执行以下步骤：
 
 **手动安装步骤 (Ubuntu 22.04):**
@@ -37,18 +41,31 @@ ssh root@<您的服务器IP>
     sudo apt update && sudo apt upgrade -y
     ```
 
-2.  **安装 Node.js (v18 LTS)**:
+2.  **安装 Node.js (v20 LTS)**:
+    Node.js 18 仍处于维护期，但 **Node.js 20 (LTS)** 是目前的长期支持版本，性能更好且支持时间更长，强烈推荐使用。
     ```bash
-    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+    curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
     sudo apt install -y nodejs
+    
+    # 验证版本
+    node -v  # 应输出 v20.x.x
+    npm -v
     ```
 
 3.  **安装 MongoDB (v7.0)**:
+    Ubuntu 22.04 (Jammy) 官方支持 MongoDB 7.0。
     ```bash
-    curl -fsSL https://pgp.mongodb.com/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+    # 导入公钥
+    curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+    
+    # 创建列表文件
     echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+    
+    # 更新并安装
     sudo apt update
     sudo apt install -y mongodb-org
+    
+    # 启动并设置开机自启
     sudo systemctl start mongod
     sudo systemctl enable mongod
     ```
@@ -118,6 +135,7 @@ npm run build
     pm2 save
     pm2 startup
     ```
+    *(运行 `pm2 startup` 后，请按照屏幕提示执行显示的命令以配置开机自启)*
 
     *注意*: 如果需要修改数据库连接字符串或 JWT 密钥，请编辑 `ecosystem.config.js` 中的 `env` 部分。
 
