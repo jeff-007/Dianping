@@ -30,10 +30,12 @@ export default function Home() {
           api.get('/merchants?limit=8') // Assuming backend supports limit or returns all
         ]);
         
-        setCategories(catRes.data);
-        setMerchants(merchRes.data);
+        setCategories(Array.isArray(catRes.data) ? catRes.data : []);
+        setMerchants(Array.isArray(merchRes.data) ? merchRes.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setCategories([]);
+        setMerchants([]);
       } finally {
         setLoading(false);
       }
@@ -58,10 +60,12 @@ export default function Home() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {categories.map((category) => {
             const Icon = iconMap[category.icon] || Utensils;
+            const categoryId = category.id || category._id; // Handle both id and _id
+            if (!categoryId) return null;
             return (
               <Link
-                key={category.id}
-                to={`/search?category=${category.id}`} // Note: MongoDB uses _id, but we can map it or use id if backend transforms it
+                key={categoryId}
+                to={`/search?category=${categoryId}`} // Note: MongoDB uses _id, but we can map it or use id if backend transforms it
                 className="flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group"
               >
                 <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center mb-3 group-hover:bg-orange-100 transition-colors">
