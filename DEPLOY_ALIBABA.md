@@ -103,7 +103,26 @@ sudo chown -R $USER:$USER /var/www/dianping
 # scp -r ./* root@<您的服务器IP>:/var/www/dianping
 ```
 
-### 3.2 安装依赖与构建
+### 3.2 配置后端环境变量（重要）
+
+本项目后端依赖环境变量（数据库连接、JWT 密钥等）。这些属于敏感信息，不建议提交到 Git 仓库。
+
+1.  进入后端目录：
+    ```bash
+    cd /var/www/dianping/server
+    ```
+
+2.  基于模板创建 `.env`：
+    ```bash
+    cp .env.example .env
+    ```
+
+3.  编辑 `.env`（至少修改 `JWT_SECRET`）：
+    ```bash
+    vim .env
+    ```
+
+### 3.3 安装依赖与构建
 
 进入项目目录并安装依赖：
 
@@ -128,16 +147,16 @@ npm run build
 
 我们使用 PM2 来管理 Node.js 后端进程，确保服务崩溃自动重启。
 
-1.  **检查配置文件**: 确保项目根目录下有 `ecosystem.config.js`。
+1.  **检查配置文件**: 确保项目根目录下有 `ecosystem.config.cjs`。
 2.  **启动服务**:
     ```bash
-    pm2 start ecosystem.config.js
+    pm2 start ecosystem.config.cjs
     pm2 save
     pm2 startup
     ```
     *(运行 `pm2 startup` 后，请按照屏幕提示执行显示的命令以配置开机自启)*
 
-    *注意*: 如果需要修改数据库连接字符串或 JWT 密钥，请编辑 `ecosystem.config.js` 中的 `env` 部分。
+    *注意*: PM2 会从 `server/.env` 读取环境变量。修改环境变量后，执行 `pm2 restart dianping-server` 使其生效。
 
 ---
 

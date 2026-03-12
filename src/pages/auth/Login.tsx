@@ -44,10 +44,11 @@ export default function Login() {
           navigate('/');
       }
 
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const apiError = err as { response?: { data?: { message?: string } } };
       console.error('Login error:', err);
       setAttempts(prev => prev + 1);
-      setError(err.response?.data?.message || 'Failed to login');
+      setError(apiError.response?.data?.message || 'Failed to login');
     } finally {
       setIsLoading(false);
     }

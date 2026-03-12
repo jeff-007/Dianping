@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { Search, MapPin, User, LogOut, Menu } from 'lucide-react';
+import { Search, MapPin, User, LogOut } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 
 export default function Layout() {
@@ -10,7 +10,7 @@ export default function Layout() {
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   const handleLogout = () => {
     logout();

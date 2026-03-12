@@ -37,9 +37,10 @@ export default function Register() {
       loginState(token, user);
       navigate('/', { state: { message: 'Registration successful!' } });
 
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const apiError = err as { response?: { data?: { message?: string } } };
       console.error('Registration error:', err);
-      setError(err.response?.data?.message || 'Failed to register');
+      setError(apiError.response?.data?.message || 'Failed to register');
     } finally {
       setIsLoading(false);
     }

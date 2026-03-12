@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import api from '../lib/api'; // Use new API client
 import { Category, Merchant } from '../types';
 import { Star, MapPin, Utensils, ShoppingBag, Gamepad2, Wrench, Bed, Coffee } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   'utensils': Utensils,
   'restaurant': Utensils,
   'shopping': ShoppingBag,
@@ -131,7 +132,7 @@ export default function Home() {
                   <div className="flex flex-wrap gap-2">
                     <span className="inline-block px-2 py-1 bg-gray-50 text-gray-600 text-xs rounded-md">
                       {/* Note: category might be populated object now */}
-                      {typeof merchant.category === 'object' ? (merchant.category as any).name : 'Local'}
+                      {merchant.category?.name ?? 'Local'}
                     </span>
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { merchantRegisterSchema, MerchantRegisterInput } from '../../lib/validations';
@@ -76,9 +76,10 @@ export default function MerchantRegister() {
       // Or redirect to dashboard directly since we are logged in?
       // navigate('/merchant/dashboard');
 
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const apiError = err as { response?: { data?: { message?: string } } };
       console.error('Merchant Registration error:', err);
-      setError(err.response?.data?.message || 'Failed to register merchant');
+      setError(apiError.response?.data?.message || 'Failed to register merchant');
     } finally {
       setIsLoading(false);
     }

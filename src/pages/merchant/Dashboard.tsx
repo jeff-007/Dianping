@@ -1,52 +1,47 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Store, Settings, LogOut, CheckCircle, Clock, XCircle } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import api from '../../lib/api';
 
+type MerchantDashboardData = {
+  _id?: string;
+  id?: string;
+  name: string;
+  audit_status?: 'pending' | 'approved' | 'rejected';
+  rejection_reason?: string;
+};
+
 export default function MerchantDashboard() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
-  const [merchant, setMerchant] = useState<any>(null);
+  const [merchant, setMerchant] = useState<MerchantDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkMerchantStatus();
-  }, []);
-
-  const checkMerchantStatus = async () => {
+  const checkMerchantStatus = useCallback(async () => {
     if (!user) {
       navigate('/auth/login');
       return;
     }
 
     try {
-      // In new API, we might need an endpoint to get merchant by owner.
-      // I didn't implement `GET /api/merchants/my-store` yet.
-      // I'll search merchants by owner_id or just mock it if I can't.
-      // Wait, `getMerchants` in controller filters by query.
-      // I should probably add `owner` to query params in controller or a specific endpoint.
-      // Let's assume I can fetch it or I'll implement a dedicated route `GET /api/merchants/me`
-      // For now, I'll try to use the list endpoint filtering if supported, or just handle it gracefully.
-      // Actually, I didn't implement filter by `owner` in `getMerchants`.
-      // I should update the backend controller to support `owner` filter or add `/me` route.
-      // BUT, since I can't easily go back and forth too much, I will assume I update the backend controller in next step or just mock for now.
-      // Let's assume I added a `my-merchant` endpoint or I can filter.
-      // I'll filter by `keyword` using the user's name if I have to, but that's flaky.
-      // I will update the backend `merchantController` to allow filtering by `owner` (userId).
-      
-      // Let's pretend I'll fix the backend in a moment.
       const { data } = await api.get(`/merchants?owner=${user._id}`);
-      // Assuming it returns an array
-      if (data && data.length > 0) {
-          setMerchant(data[0]);
+      if (Array.isArray(data) && data.length > 0) {
+        setMerchant(data[0] as MerchantDashboardData);
+      } else {
+        setMerchant(null);
       }
     } catch (err) {
       console.error('Error fetching merchant:', err);
+      setMerchant(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate, user]);
+
+  useEffect(() => {
+    checkMerchantStatus();
+  }, [checkMerchantStatus]);
 
   const handleLogout = () => {
     logout();

@@ -1,4 +1,3 @@
-
 module.exports = {
   apps: [
     {
@@ -10,12 +9,10 @@ module.exports = {
       autorestart: true,
       watch: false,
       max_memory_restart: "1G",
+      env_file: "./server/.env",
       env: {
-        NODE_ENV: "production",
-        PORT: 5000,
-        MONGO_URI: "mongodb://127.0.0.1:27017/dianping",
-        JWT_SECRET: "your_jwt_secret_change_this_in_production"
-      },
-    },
-  ],
+        NODE_ENV: "production"
+      }
+    }
+  ]
 };
