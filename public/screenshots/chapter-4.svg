@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020617"/>
+      <stop offset="1" stop-color="#0b1220"/>
+    </linearGradient>
+    <radialGradient id="r" cx="30%" cy="45%" r="80%">
+      <stop offset="0" stop-color="#fb7185" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="750" fill="url(#g)"/>
+  <rect width="1200" height="750" fill="url(#r)"/>
+  <text x="90" y="200" fill="#e5e7eb" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="54" letter-spacing="5">AI STACK</text>
+  <text x="90" y="252" fill="#9ca3af" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="20">LLM · tools · fullstack · product</text>
+  <g stroke="#a78bfa" stroke-opacity="0.28" fill="none">
+    <path d="M820 240C920 190 1030 210 1100 280" />
+    <path d="M820 340C920 290 1030 310 1100 380" />
+    <path d="M820 440C920 390 1030 410 1100 480" />
+  </g>
+  <g fill="#a78bfa" fill-opacity="0.4">
+    <circle cx="820" cy="240" r="4"/>
+    <circle cx="1100" cy="280" r="4"/>
+    <circle cx="820" cy="340" r="4"/>
+    <circle cx="1100" cy="380" r="4"/>
+    <circle cx="820" cy="440" r="4"/>
+    <circle cx="1100" cy="480" r="4"/>
+  </g>
+</svg>

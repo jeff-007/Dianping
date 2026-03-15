@@ -6,12 +6,15 @@ import Register from './pages/auth/Register';
 import MerchantRegister from './pages/merchant/Register';
 import MerchantDashboard from './pages/merchant/Dashboard';
 import Placeholder from './components/Placeholder';
+import ImmersiveHomePage from './app/page';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<ImmersiveHomePage />} />
+
+        <Route path="/legacy" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="search" element={<Placeholder title="Search & Filters" />} />
           <Route path="merchant/:id" element={<Placeholder title="Merchant Details" />} />
